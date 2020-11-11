@@ -1,24 +1,19 @@
 class Api::V1::ArticlesController < ApplicationController
   before_action :set_article, only: [:show, :update, :destroy]
+  before_action :fetch_articles, only: [:index]
 
   # GET /articles
-  def index
-    @articles = Article.all
-
-    render json: @articles
-  end
+  def index; end
 
   # GET /articles/1
-  def show
-    render json: @article
-  end
+  def show; end
 
   # POST /articles
   def create
     @article = Article.new(article_params)
 
     if @article.save
-      render json: @article
+      render :show
     else
       render json: @article.errors
     end
@@ -35,7 +30,11 @@ class Api::V1::ArticlesController < ApplicationController
 
   # DELETE /articles/1
   def destroy
-    @article.destroy
+    if @article.destroy
+      render json: "Deleted Successfully"
+    else
+      render json: "Something went wrong"
+    end
   end
 
   private
@@ -47,5 +46,9 @@ class Api::V1::ArticlesController < ApplicationController
     # Only allow a trusted parameter "white list" through.
     def article_params
       params.require(:article).permit(:name, :author)
+    end
+
+    def fetch_articles
+      @articles = Article.includes(:comments).all
     end
 end

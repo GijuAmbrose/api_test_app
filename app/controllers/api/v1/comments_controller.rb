@@ -1,13 +1,10 @@
 class Api::V1::CommentsController < ApplicationController
   before_action :set_comment, only: [:show, :update, :destroy]
   before_action :set_article, only: [:create, :update]
+  before_action :fetch_comment, only: [:index]
 
   # GET /comments
-  def index
-    @comments = Comment.all
-
-    render json: @comments
-  end
+  def index; end
 
   # GET /comments/1
   def show
@@ -19,7 +16,7 @@ class Api::V1::CommentsController < ApplicationController
     @comment = @article.comments.new(comment_params)
 
     if @comment.save
-      render json: @comment, status: :created
+      render "/api/v1/articles/show"
     else
       render json: @comment.errors, status: :unprocessable_entity
     end
@@ -52,5 +49,9 @@ class Api::V1::CommentsController < ApplicationController
 
     def set_article
       @article = Article.find(params["article_id"])
+    end
+
+    def fetch_comment
+      @comments = Comment.all
     end
 end
