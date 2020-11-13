@@ -4,7 +4,7 @@ class Users::SessionsController < Devise::SessionsController
   # before_action :configure_sign_in_params, only: [:create]
 
   respond_to :json
-  
+
 
   # GET /resource/sign_in
   # def new
@@ -36,16 +36,16 @@ class Users::SessionsController < Devise::SessionsController
   #   devise_parameter_sanitizer.permit(:sign_in, keys: [:attribute])
   # end
 
-  private
+  # private
 
-  def respond_with(resource, _opts = {})
-    render json: {
-    status: {code: 200, message: 'Logged in successfully.'},
-    data: UserSerializer.new(resource).serializable_hash[:data][:attributes]
-    }
-  end
+  # def respond_with(resource, _opts = {})
+  #   render json: {
+  #   status: {code: 200, message: 'Logged in successfully.'},
+  #   data: UserSerializer.new(resource).serializable_hash[:data][:attributes]
+  #   }
+  # end
   
-  def respond_to_on_destroy
-    head :ok
-  end
+  # def respond_to_on_destroy
+  #   head :ok
+  # end
 end
