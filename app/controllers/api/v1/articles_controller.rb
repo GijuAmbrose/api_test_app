@@ -1,6 +1,8 @@
 class Api::V1::ArticlesController < ApplicationController
+  before_action :authenticate_user!
   before_action :set_article, only: [:show, :update, :destroy]
   before_action :fetch_articles, only: [:index]
+
 
   # GET /articles
   def index; end
