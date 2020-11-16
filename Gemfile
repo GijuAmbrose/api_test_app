@@ -28,6 +28,10 @@ gem 'pry'
 gem 'devise'
 gem 'devise-jwt'
 gem 'fast_jsonapi'
+gem 'rspec-rails'
+gem 'rails-controller-testing'
+gem 'factory_bot_rails'
+gem 'database_cleaner'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console

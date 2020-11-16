@@ -310,7 +310,7 @@ Devise.setup do |config|
   # config.sign_in_after_change_password = true
   config.navigational_formats = []
   config.jwt do |jwt|
-    jwt.secret = Rails.application.credentials.secret_access_key
+    jwt.secret = Rails.application.credentials.dig(:jwt_access_key)
     jwt.dispatch_requests = [
       ['POST', %r{^/login$}]
     ]
