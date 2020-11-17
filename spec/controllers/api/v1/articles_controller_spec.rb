@@ -31,6 +31,14 @@ RSpec.describe Api::V1::ArticlesController, :type => :controller do
       end
     end
 
+    describe 'PATCH /articles/:id' do
+      let!(:article) {FactoryBot.create(:article, name: '1974', author: "Giju Ambrose")}
+      it 'updates an article' do
+        patch :update, format: :json, params: {id: article.id, article: {name: 'The New Test', author: 'Ambrose'}}
+        expect(response).to have_http_status(200)
+      end
+    end
+
     describe 'DELETE /articles/:id' do
       let!(:article) {FactoryBot.create(:article, name: "1984", author: "George Orwell")}
       it 'deletes an article' do
