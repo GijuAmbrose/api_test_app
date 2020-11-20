@@ -33,6 +33,7 @@ gem 'rails-controller-testing'
 gem 'factory_bot_rails'
 gem 'database_cleaner'
 gem 'faker'
+gem 'shoulda-matchers'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
