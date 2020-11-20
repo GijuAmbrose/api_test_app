@@ -1,9 +1,25 @@
 require 'rails_helper'
 
-RSpec.describe Api::V1::CommentsController, :type => :controller do
+RSpec.describe 'Api::V1::CommentsController', :type => :request do
+
+  let(:user) {FactoryBot.create_list(:user, 1)}
+  let(:params) do
+    {
+      user: {
+        email: user.first.email,
+        password: user.first.password
+      }
+    }
+  end
 
   describe "Comments API" do
-    render_views
+
+    before do
+      #post "/signup", params: params.to_json, headers: { 'CONTENT_TYPE' => 'application/json', 'ACCEPT' => 'application/json' }
+      post "/login", params: {user: {email: user.first.email, password: user.first.password}}.to_json, headers: { 'CONTENT_TYPE' => 'application/json', 'ACCEPT' => 'application/json' }
+      @token_from_request = response.headers['Authorization'].split(' ').last
+      
+    end 
 
     describe "GET /comments" do 
 
@@ -16,7 +32,7 @@ RSpec.describe Api::V1::CommentsController, :type => :controller do
 
       it "returns all comments" do
 
-        get :index, params: { article_id: 1 }, format: :json
+        get '/api/v1/articles/1/comments', headers: { 'CONTENT_TYPE' => 'application/json', 'ACCEPT' => 'application/json', 'Authorization' => "Bearer #{@token_from_request}"}
         expect(response).to have_http_status(:success)
         expect(JSON.parse(response.body).size).to eq(1)
       end
@@ -30,7 +46,7 @@ RSpec.describe Api::V1::CommentsController, :type => :controller do
 
       it 'creates new comment' do
         expect {   
-        post :create,format: :json, params: {article_id: @article.id, comment: {comment: 'The book is good', article_id: @article.id}}
+        post "/api/v1/articles/#{@article.id}/comments", params: {comment: {comment: 'The book is good'}}.to_json, headers: { 'CONTENT_TYPE' => 'application/json', 'ACCEPT' => 'application/json', 'Authorization' => "Bearer #{@token_from_request}"}
         }.to change {Comment.count}.from(0).to(1)
         expect(response).to have_http_status(200)
 
@@ -46,7 +62,7 @@ RSpec.describe Api::V1::CommentsController, :type => :controller do
       it 'deletes a comment' do
 
         expect{
-          delete :destroy, format: :json, params: {article_id: @article.id, id: comment.id}
+          delete "/api/v1/articles/#{@article.id}/comments/#{comment.id}", headers: { 'CONTENT_TYPE' => 'application/json', 'ACCEPT' => 'application/json', 'Authorization' => "Bearer #{@token_from_request}"}
         }.to change{Comment.count}.from(1).to(0)
 
         expect(response).to have_http_status(204)
